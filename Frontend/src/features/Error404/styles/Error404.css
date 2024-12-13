@@ -1,0 +1,105 @@
+.error-block {
+    max-width: 600px;
+    padding: 40px;
+    background: #1f2c34;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Center horizontally */
+    text-align: center; /* Align content for a cleaner design */
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-50%);
+    margin-top: 50vh;
+}
+
+.error-block h1 {
+    font-size: 48px;
+    color: #25d366;
+    margin-bottom: 20px;
+}
+
+.error-block p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: white;
+}
+
+.err {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: #ffffff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Add hover effects */
+}
+
+.err:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .error-block {
+        max-width: 70%; /* Use a percentage for flexible layout */
+        padding: 30px;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-block h1 {
+        font-size: 36px; /* Reduce heading size for smaller screens */
+    }
+
+    .error-block p {
+        font-size: 16px; /* Adjust text size for readability */
+    }
+
+    .err {
+        padding: 8px 16px; /* Slightly smaller button */
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .error-block {
+        width: 70%;
+        padding: 20px;
+        margin: 10px auto;
+    }
+
+    .error-block h1 {
+        font-size: 28px; /* Further reduce heading size */
+    }
+
+    .error-block p {
+        font-size: 14px;
+    }
+
+    .err {
+        padding: 6px 12px;
+        font-size: 12px; /* Smaller button size for mobile */
+    }
+}
+
+/* Larger screens (e.g., desktops or wide displays) */
+@media screen and (min-width: 1200px) {
+    .error-block {
+        max-width: 700px; /* Slightly larger block for big screens */
+        padding: 50px;
+    }
+
+    .error-block h1 {
+        font-size: 56px; /* Enhance heading size */
+    }
+
+    .error-block p {
+        font-size: 20px; /* Slightly larger text */
+    }
+
+    .err {
+        font-size: 18px;
+        padding: 12px 24px; /* Larger buttons */
+    }
+}

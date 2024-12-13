@@ -1,0 +1,158 @@
+
+
+/* General Form Container Styles */
+.form-container {
+    background-color: #1f2c34; /* WhatsApp dark background */
+    padding: 30px 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); /* Darker shadow */
+    width: 100%;
+    max-width: 400px;
+    margin: auto; /* Center horizontally */
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-50%);
+    margin-top: 50vh;
+    color: #d1d7db; /* Light text color */
+}
+
+/* Heading Styles */
+.form-container h1 {
+    font-size: 48px;
+    color: #25d366; /* WhatsApp green */
+    text-align: center;
+}
+
+/* Register Link */
+.register-link {
+    text-align: center;
+    font-size: 14px;
+    color: #8696a0; /* Subtle gray */
+    margin-top: 10px;
+}
+
+.register-link a {
+    color: #25d366; /* WhatsApp green */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #1ebd56; /* Slightly darker green on hover */
+}
+
+/* Register Form Heading */
+.register-form h1 {
+    color: #25d366; /* WhatsApp green */
+}
+
+/* Base Notification Styles */
+.notification {
+    position: fixed;
+    top: -50px; /* Start off-screen */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4d4f; /* Red for errors (retain error color for contrast) */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); /* Darker shadow */
+    z-index: 1000;
+    opacity: 0; /* Invisible by default */
+    transition: all 0.5s ease-in-out; /* Smooth slide and fade effect */
+}
+
+/* Show Notification */
+.notification.show {
+    top: 20px; /* Slide into view */
+    opacity: 1; /* Make visible */
+}
+
+/* Hide Notification */
+.notification {
+    top: -50px; /* Slide out of view */
+    opacity: 0; /* Fade out */
+}
+
+/* Responsive Design */
+
+/* For Tablets and Medium Screens */
+@media screen and (max-width: 768px) {
+    .form-container {
+        padding: 20px 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Adjust shadow */
+    }
+
+    .form-container h1 {
+        font-size: 36px;
+    }
+
+    .register-link {
+        font-size: 12px;
+    }
+}
+
+/* For Mobile Devices */
+@media screen and (max-width: 480px) {
+    .form-container {
+        width: 70%;
+        padding: 15px 10px;
+        margin: 10px auto;
+        transform: translateY(-50%);
+        margin-top: 40vh;
+    }
+
+    .form-container h1 {
+        font-size: 28px;
+    }
+
+    .register-link {
+        font-size: 10px;
+    }
+}
+
+/* For Large Screens */
+@media screen and (min-width: 1200px) {
+    .form-container {
+        max-width: 500px;
+        padding: 40px 30px;
+    }
+
+    .form-container h1 {
+        font-size: 56px;
+    }
+
+    .register-link {
+        font-size: 16px;
+    }
+}
+
+/* Input Field */
+input, textarea, select {
+    background-color: #2a3942; /* Dark background for input fields */
+    color: #d1d7db; /* Light text color */
+    border: 1px solid #394d54; /* Subtle border */
+    padding: 10px 15px; /* Comfortable padding */
+    border-radius: 5px; /* Slightly rounded corners */
+    font-size: 14px;
+    outline: none; /* Remove default focus outline */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    width: 100%; /* Full width */
+}
+
+/* Input Field on Focus */
+input:focus, textarea:focus, select:focus {
+    background-color: #3c454a; /* Slightly lighter background on focus */
+    border-color: #25d366; /* WhatsApp green border on focus */
+    color: #d1d7db; /* Ensure consistent text color */
+    outline: none; /* Remove browser's default focus outline */
+}
+
+/* Placeholder Text */
+input::placeholder, textarea::placeholder {
+    color: #8696a0; /* Subtle placeholder color */
+    font-style: italic; /* Optional: make it italic */
+}
+
