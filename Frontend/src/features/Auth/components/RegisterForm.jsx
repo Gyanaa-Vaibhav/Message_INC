@@ -11,15 +11,12 @@ export default  function RegisterForm(){
     const confirmPasswordRef = useRef(null);
     const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/register' : '/register';
 
-    const [errorMessage, setErrorMessage] = useState('');
-    const [showError, setShowError] = useState(false);
     const [showPopup, setShowPopup] = useState(false); // To control popup visibility
     const [popupMessage, setPopupMessage] = useState(""); // To set popup message
     const [errors, setErrors] = useState({ username:'' ,email: '', password: '' ,confirmPassword: '' });
 
     function handelSubmit(e){
         e.preventDefault();
-
 
         const validateEmail = (value) => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,9 +72,6 @@ export default  function RegisterForm(){
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data.success)
-                console.log(data.message)
-                console.log(data)
                 if (data.success) {
                     setPopupMessage('You have successfully registered! Redirecting to login page...');
                     setShowPopup(true)
