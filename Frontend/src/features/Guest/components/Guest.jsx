@@ -11,7 +11,8 @@ export function Guest() {
 
         setLoading(true);
 
-        fetch(`http://62.72.59.39:6969/guest/${username || 'guest'}`)
+        // TODO: Fetch the user and store the accessToken in localStorage
+        fetch(`guest/${username || 'guest'}`)
             .then(res => {
                 return res.json();
             })

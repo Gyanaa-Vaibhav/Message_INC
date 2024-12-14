@@ -1,8 +1,9 @@
 import {registerUser} from "../model/registerModel.js";
+import path from "node:path";
+import {htmlDir} from "../../../app.js";
 
 export function renderRegister(req, res) {
-    // TODO need to redirect to /register
-    res.end()
+    res.sendFile(path.join(htmlDir, 'index.html'));
 }
 
 export async function handelRegister(req,res,next){

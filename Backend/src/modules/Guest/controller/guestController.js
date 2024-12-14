@@ -1,10 +1,12 @@
 // DONE: Implement guest login
 import {generateAccessToken} from "../../../shared/index.js";
 import { v4  } from 'uuid';
+import path from "node:path";
+import {htmlDir} from "../../../app.js";
 
 
 export function renderGuest(req,res){
-    res.send('Guest Login')
+    res.sendFile(path.join(htmlDir, 'index.html'));
 }
 
 // Handle guest login

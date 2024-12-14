@@ -2,14 +2,18 @@ import React, {useRef, useState} from "react";
 import {Button, Input} from '../../../shared/index.js'
 import {v4} from 'uuid';
 import '../styles/form.css'
+import log from "eslint-plugin-react/lib/util/log.js";
 
 export default  function RegisterForm(){
     const emailRef = useRef(null);
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+
     const [errorMessage, setErrorMessage] = useState('');
-    const [showError, setShowError] = useState(false)
+    const [showError, setShowError] = useState(false);
+    const [showPopup, setShowPopup] = useState(false); // To control popup visibility
+    const [popupMessage, setPopupMessage] = useState(""); // To set popup message
     const [errors, setErrors] = useState({ username:'' ,email: '', password: '' ,confirmPassword: '' });
 
     function handelSubmit(e){
@@ -55,9 +59,8 @@ export default  function RegisterForm(){
             return;
         }
 
-        console.log(v4());
-
-        fetch('http://62.72.59.39:6969/register', {
+        // TODO: Send the data to the server
+        fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -72,11 +75,24 @@ export default  function RegisterForm(){
         })
             .then(res => res.json())
             .then(data => {
+                console.log(data.success)
+                console.log(data.message)
                 console.log(data)
+                if (data.success) {
+                    setPopupMessage('You have successfully registered! Redirecting to login page...');
+                    setShowPopup(true)
+                    setTimeout(()=>{window.location.pathname = '/login'}, 3000);
+                } else {
+                    setPopupMessage(data.message);
+                    setShowPopup(true);
+                    setTimeout(()=>{setShowPopup(false)}, 3000);
+                }
             })
-            .finally(window.location.pathname = '/login');
-
     }
+
+    const closePopup = () => {
+        setShowPopup(false);
+    };
 
     return (
         <div className="form-container">
@@ -92,7 +108,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.username && <small style={{ color: 'red'}}>{errors.username}</small>}
+                {errors.username && <small style={{color: 'red'}}>{errors.username}</small>}
 
                 <Input
                     ref={emailRef}
@@ -103,7 +119,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.email && <small style={{ color: 'red'}}>{errors.email}</small>}
+                {errors.email && <small style={{color: 'red'}}>{errors.email}</small>}
 
                 <Input
                     ref={passwordRef}
@@ -114,7 +130,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.password && <small style={{ color: 'red' }}>{errors.password}</small> }
+                {errors.password && <small style={{color: 'red'}}>{errors.password}</small>}
 
                 <Input
                     ref={confirmPasswordRef}
@@ -125,15 +141,35 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.confirmPassword && <small style={{ color: 'red' }}>{errors.confirmPassword}</small> }
+                {errors.confirmPassword && <small style={{color: 'red'}}>{errors.confirmPassword}</small>}
 
                 <Button
                     label="Register"
                     type="submit"
-                    onClick={(e)=>handelSubmit(e)}
+                    onClick={(e) => handelSubmit(e)}
                 />
                 <p className="register-link">Already have an account? <a href="/login">Login here</a></p>
             </form>
+
+            {/* Popup */}
+            {showPopup && (
+                <div
+                    className="popup-overlay"
+                    onClick={closePopup} // Close popup when clicking outside
+                >
+                    <div
+                        className="popup"
+                        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                    >
+                        <p>{popupMessage}</p>
+                        <div className="popup-slider"></div>
+                        <button className="popup-close-btn" onClick={closePopup}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </div>
 
     )

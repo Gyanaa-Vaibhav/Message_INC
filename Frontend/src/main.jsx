@@ -1,4 +1,3 @@
-// TODO
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { StrictMode } from 'react'
@@ -7,7 +6,6 @@ import './index.css'
 import {LoginForm,RegisterForm,Error,Guest} from './features/index.js'
 import App from './App.jsx'
 import Chat from "./features/Chat/components/Chat.jsx";
-
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

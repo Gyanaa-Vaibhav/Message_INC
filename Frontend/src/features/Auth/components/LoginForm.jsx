@@ -9,6 +9,7 @@ export default function LoginForm() {
     const [showError, setShowError] = useState(false)
     const [errors, setErrors] = useState({ email: '', password: '' });
 
+    console.log("Chanhoge")
     const validateEmail = (value) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value);
@@ -32,7 +33,7 @@ export default function LoginForm() {
             return
         }
 
-        fetch('http://62.72.59.39:6969/login',{
+        fetch('/login',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Specify content type

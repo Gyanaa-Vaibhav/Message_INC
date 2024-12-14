@@ -6,7 +6,7 @@ export const useAuthFetch = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const result = await verifyOrRefreshToken(`http://62.72.59.39:6969${window.location.pathname}`);
+            const result = await verifyOrRefreshToken(`${window.location.pathname}`);
             setLoading(false);
         }
 

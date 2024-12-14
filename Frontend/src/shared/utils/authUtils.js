@@ -13,8 +13,7 @@ export async function verifyOrRefreshToken(fetchUrl) {
         console.log('Token expired or unauthorized. Refreshing token...');
 
         // Attempt to refresh the token
-        // TODO CHANGE BACK THE REFRESH TOKEN'S URL
-        const refreshResponse = await fetch('http://62.72.59.39:6969/refreshToken', {
+        const refreshResponse = await fetch('/refreshToken', {
             method: 'POST',
             credentials: 'include',
         });

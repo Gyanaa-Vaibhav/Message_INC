@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { verifyOrRefreshToken } from '../../../shared/index.js';
 
-const SOCKET_URL = 'http://62.72.59.39:6969';
+const SOCKET_URL = 'https://gyanaavaibhav.in';
 
 let socket = null;
 
@@ -13,13 +13,19 @@ export const getSocket = async () => {
     let token = localStorage.getItem('accessToken');
 
     const isExpired = () => {
-        const { exp } = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
-        return Date.now() >= exp * 1000;
+        try {
+            const { exp } = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+            return Date.now() >= exp * 1000;
+        } catch (error) {
+            console.error('Invalid token:', error);
+            return true;
+        }
     };
 
     if (isExpired()) {
         console.warn('Token expired. Attempting to refresh...');
-        token = await verifyOrRefreshToken('http://62.72.59.39:6969/chat');
+        // TODO Change this to the correct URL
+        token = await verifyOrRefreshToken('/chat');
         if (!token) {
             console.error('Unable to refresh token. Redirecting to login...');
             window.location.href = '/login';
@@ -29,7 +35,11 @@ export const getSocket = async () => {
     }
 
     // Initialize the socket connection
-    socket = io(SOCKET_URL, { auth: { token } });
+    socket = io(SOCKET_URL, {
+        path: '/socket.io',
+        auth: { token },
+        transports: ['websocket', 'polling'],
+    });
 
     socket.on('connect', () => {
         // console.log('Socket connected:', socket.id);
@@ -41,7 +51,8 @@ export const getSocket = async () => {
 
     socket.on('tokenExpired', async () => {
         console.warn('Token expired during session. Attempting to refresh...');
-        const newToken = await verifyOrRefreshToken('http://62.72.59.39:6969/chat');
+        // TODO Change this to the correct URL
+        const newToken = await verifyOrRefreshToken('/chat');
         if (newToken) {
             socket.auth.token = newToken;
             socket.connect();

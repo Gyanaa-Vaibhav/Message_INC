@@ -9,7 +9,7 @@
 
 .messages {
     flex: 1;
-    gap: 10px;
+    gap: 15px;
     display: flex;
     padding: 10px;
     color: #d1d7db;

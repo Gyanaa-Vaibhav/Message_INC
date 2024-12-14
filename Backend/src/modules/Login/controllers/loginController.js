@@ -1,13 +1,16 @@
 import * as loginModel from '../models/loginModel.js';
 import {generateAccessToken, generateRefreshToken} from "../../../shared/index.js";
+import {htmlDir} from "../../../app.js";
+import path from 'path';
 
 // Render Login Page
 export function renderLogin(req, res) {
-    res.send('Login');
+    res.sendFile(path.join(htmlDir, 'index.html'));
 }
 
 // Handle Login
 export async function handleLogin(req, res,next) {
+    console.log("Inside handleLogin");
     try{
         const {email,password} = req.body;
         const result = await loginModel.handleLogin(email,password);
@@ -26,7 +29,6 @@ export async function handleLogin(req, res,next) {
         if(result.success){
             res.cookie('refreshToken',refreshToken,{
                 httpOnly: true,
-                // TODO SET TO TRUE AS HTTPS not required in development
                 secure: true,
                 sameSite: 'Lax',
                 maxAge: 7 * 24 * 60 * 60 * 1000,

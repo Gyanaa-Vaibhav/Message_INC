@@ -38,9 +38,8 @@ const Chat = () => {
 
     const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
-        console.log(scrollHeight,clientHeight,scrollTop);
 
-        if(clientHeight+scrollTop+300 <= scrollHeight) setMessagePopup(true)
+        if(clientHeight+scrollTop+250 <= scrollHeight) setMessagePopup(true)
 
         if(scrollTop + clientHeight >= scrollHeight){
             setNewMessage(false)

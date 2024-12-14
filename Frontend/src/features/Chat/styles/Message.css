@@ -1,7 +1,6 @@
 .message {
     display: flex;
     gap: 10px;
-    margin: 10px 0;
     background-color: #2a3942;
     color: #d1d7db;
     padding: 10px 15px;
