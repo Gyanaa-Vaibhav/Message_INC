@@ -89,9 +89,13 @@ app.use('/guest',guestRoute)
 // Refresh Token
 app.post('/refreshToken',refreshToken)
 
+// Chat Route
 app.get('/chat',(req,res)=>{
-    console.log(req.user);
     res.sendFile(path.join(htmlDir, 'index.html'));
+})
+
+app.get('/chat/:name',(req,res)=>{
+    res.json({"message":"Hello"})
 })
 
 // Protected Routes
@@ -104,14 +108,8 @@ app.use(jwtTokenValidator)
 // Get Current User
 app.get("/current_user", getCurrentUser);
 
-// Chat Route
-app.get('/chat/:name',(req,res)=>{
-    res.json({"message":"Hello"})
-})
-
 // Socket.io Connection
 io.on('connection', (socket) => {
-
     io.emit('userJoined', {
         username: socket.user.username,
         time: new Date().toISOString(),
