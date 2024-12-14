@@ -6,13 +6,14 @@ export function Guest() {
     const [loading, setLoading] = React.useState(false);
     const [username, setUsername] = useState('');
     const [isGuest, setIsGuest] = useState(false);
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP : '/';
 
     function fetchUser() {
 
         setLoading(true);
 
-        // TODO: Fetch the user and store the accessToken in localStorage
-        fetch(`guest/${username || 'guest'}`)
+        // TODO: Change 3
+        fetch(url+`/guest/${username || 'Guest'}`)
             .then(res => {
                 return res.json();
             })

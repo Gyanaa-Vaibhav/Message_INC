@@ -9,6 +9,7 @@ export default  function RegisterForm(){
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/register' : '/register';
 
     const [errorMessage, setErrorMessage] = useState('');
     const [showError, setShowError] = useState(false);
@@ -59,8 +60,7 @@ export default  function RegisterForm(){
             return;
         }
 
-        // TODO: Send the data to the server
-        fetch('/register', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

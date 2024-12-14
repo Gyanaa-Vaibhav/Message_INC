@@ -1,9 +1,8 @@
-import {useEffect, useState} from "react";
-
 export async function getUser(){
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/current_user' : '/current_user';
+
     try {
-        // TODO CHANGED TO /current_user
-        const response = await fetch("/current_user", {
+        const response = await fetch(url, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },

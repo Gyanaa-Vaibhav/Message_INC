@@ -2,6 +2,8 @@ import { io } from 'socket.io-client';
 import { verifyOrRefreshToken } from '../../../shared/index.js';
 
 const SOCKET_URL = 'https://gyanaavaibhav.in';
+// TODO Change 2
+const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/chat' : '/chat';
 
 let socket = null;
 
@@ -24,8 +26,8 @@ export const getSocket = async () => {
 
     if (isExpired()) {
         console.warn('Token expired. Attempting to refresh...');
-        // TODO Change this to the correct URL
-        token = await verifyOrRefreshToken('/chat');
+        // TODO Change 1
+        token = await verifyOrRefreshToken(url);
         if (!token) {
             console.error('Unable to refresh token. Redirecting to login...');
             window.location.href = '/login';
@@ -51,8 +53,8 @@ export const getSocket = async () => {
 
     socket.on('tokenExpired', async () => {
         console.warn('Token expired during session. Attempting to refresh...');
-        // TODO Change this to the correct URL
-        const newToken = await verifyOrRefreshToken('/chat');
+        // TODO Change 3
+        const newToken = await verifyOrRefreshToken(url);
         if (newToken) {
             socket.auth.token = newToken;
             socket.connect();

@@ -1,8 +1,9 @@
 export async function verifyOrRefreshToken(fetchUrl) {
     const accessToken = localStorage.getItem('accessToken');
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+fetchUrl : fetchUrl;
 
     // Initial API call
-    let response = await fetch(fetchUrl, {
+    let response = await fetch(url, {
         headers: {
             Authorization: `Bearer ${accessToken || ''}`,
         },
@@ -11,9 +12,10 @@ export async function verifyOrRefreshToken(fetchUrl) {
     // If the token is invalid or expired
     if (!response.ok) {
         console.log('Token expired or unauthorized. Refreshing token...');
+        const refreshUrl = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/refreshToken' : '/refreshToken';
 
         // Attempt to refresh the token
-        const refreshResponse = await fetch('/refreshToken', {
+        const refreshResponse = await fetch(refreshUrl, {
             method: 'POST',
             credentials: 'include',
         });

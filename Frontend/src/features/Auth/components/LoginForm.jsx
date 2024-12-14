@@ -8,8 +8,8 @@ export default function LoginForm() {
     const [errorMessage, setErrorMessage] = useState(''); // State to store the error message
     const [showError, setShowError] = useState(false)
     const [errors, setErrors] = useState({ email: '', password: '' });
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/login' : '/login';
 
-    console.log("Chanhoge")
     const validateEmail = (value) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value);
@@ -33,7 +33,7 @@ export default function LoginForm() {
             return
         }
 
-        fetch('/login',{
+        fetch(url,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Specify content type

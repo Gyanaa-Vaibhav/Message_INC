@@ -24,7 +24,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'https://gyanaavaibhav.in',
+        origin: process.env.DEPLOYMENT_IP,
         methods: ['GET', 'POST'],
         credentials: true,
     },
@@ -38,9 +38,19 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(rateLimiter)
+app.use(cors({
+    origin: process.env.DEPLOYMENT_IP,
+    credentials: true,
+}));
+app.use(helmet());
+app.use(cookieParser())
+app.use(express.json());
+
+// Middleware
+app.use(rateLimiter)
 
 app.use(cors({
-    origin: 'https://gyanaavaibhav.in',
+    origin: process.env.DEPLOYMENT_IP,
     methods: ['GET', 'POST', 'OPTIONS'],    // Explicitly allow these methods
     allowedHeaders: ['Content-Type'],
     credentials: true, // Allow cookie
@@ -65,12 +75,6 @@ app.use(cookieParser())
 app.use(express.json());
 
 app.use(express.static(path.join(htmlDir)));
-
-// Serve index.html for all frontend routes
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(htmlDir, 'index.html'));
-// });
-
 
 // Unprotected Routes
 // Login Route

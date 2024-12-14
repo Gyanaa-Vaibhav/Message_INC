@@ -4,12 +4,14 @@ import LoginForm from "./features/Auth/components/LoginForm.jsx";
 
 function App() {
     const [count, setCount] = useState(0)
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/api' : '/api';
+
     function handelFetch() {
-        fetch('/api').then(res => res.json()).then(data=>console.log(data)).catch(err => console.log(err))
+        fetch(url).then(res => res.json()).then(data=>console.log(data)).catch(err => console.log(err))
     }
 
     function handelPostFetch(){
-        fetch('https://www.gyanaavaibhav.in/api',{
+        fetch(url,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
