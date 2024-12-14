@@ -1,8 +1,6 @@
 import React, {useRef, useState} from "react";
 import {Button, Input} from '../../../shared/index.js'
-import {v4} from 'uuid';
 import '../styles/form.css'
-import log from "eslint-plugin-react/lib/util/log.js";
 
 export default  function RegisterForm(){
     const emailRef = useRef(null);

@@ -79,6 +79,43 @@ label {
     margin-left: 10px;
 }
 
+.loading .dots{
+    position: relative;
+    margin-left: 8px;
+}
+
+.loading .dots span {
+    display: inline-block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    margin-left: 5px;
+    background-color: white;
+    border-radius: 50%;
+    animation: waveBig 1.5s infinite ease-in-out;
+    bottom: 5px;
+}
+
+.dots span:nth-child(1) { animation-delay: 0s; }
+.dots span:nth-child(2) { margin-left: 20px; animation-delay: 0.2s; }
+.dots span:nth-child(3) {margin-left: 35px; animation-delay: 0.4s; }
+
+@keyframes waveBig {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes waveMedium {
+    0%, 100% { transform: translateY(0); }
+     50% { transform: translateY(-8px); }
+}
+
+@keyframes waveSmall {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+
 @media screen and (max-width: 768px) {
     .guest-container {
         padding: 20px 15px;
@@ -86,6 +123,20 @@ label {
 
     .guest-container h1 {
         font-size: 36px;
+    }
+
+    .loading .dots span{
+        width: 5px;
+        height: 5px;
+        animation: waveMedium 1.5s infinite ease-in-out;
+    }
+
+    .dots span:nth-child(2) {
+        margin-left: 15px;
+    }
+
+    .dots span:nth-child(3) {
+        margin-left: 25px;
     }
 }
 
@@ -98,11 +149,30 @@ label {
         margin-top: 45vh;
     }
 
+    .loading .dots{
+        margin-left: 4px;
+    }
+
+    .loading .dots span{
+        margin-left: 4px;
+        width: 2px;
+        height: 2px;
+        animation: waveSmall 1.5s infinite ease-in-out;
+    }
+
     .guest-container h1 {
         font-size: 28px;
     }
 
     .guest-container button {
         width: 100%;
+    }
+
+    .dots span:nth-child(2) {
+        margin-left: 8px;
+    }
+
+    .dots span:nth-child(3) {
+        margin-left: 12px;
     }
 }

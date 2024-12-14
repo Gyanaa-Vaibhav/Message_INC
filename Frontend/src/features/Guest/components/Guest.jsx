@@ -1,19 +1,54 @@
 // DONE
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import '../styles/Guest.css'
 
 export function Guest() {
-    const [loading, setLoading] = React.useState(false);
+    // URL
+    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/' : '/';
+
+    // State
     const [username, setUsername] = useState('');
+    const [errors, setErrors] = useState({ username:'' });
     const [isGuest, setIsGuest] = useState(false);
-    const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP : '/';
+    const [loading, setLoading] = React.useState(false);
+
+    // Refs
+    const usernameRef = useRef(null);
+    const guestRef = useRef(null);
 
     function fetchUser() {
+
+        const validateUser = (value)=>{
+            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+            if(value === ''){
+                return 'Username is required';
+            }else if(value.length < 4 || value.length > 20){
+                return 'Username must be 3-20 characters long';
+            } else if(!usernameRegex.test(value)){
+                return 'Username can only contain letters, numbers, and underscores (_).'
+            }
+            return '';
+        }
+
+
+        if(!guestRef.current.checked){
+            const usernameError = validateUser(usernameRef.current.value);
+
+            if (!usernameError) {
+                console.log(usernameRef.current.value);
+                setErrors({username: ''});
+            } else {
+                console.log(usernameRef.current.value);
+                setErrors({username: usernameError });
+                return;
+            }
+        }
+
 
         setLoading(true);
 
         // TODO: Change 3
-        fetch(url+`/guest/${username || 'Guest'}`)
+        fetch(url+`guest/${username || 'Guest'}`)
             .then(res => {
                 return res.json();
             })
@@ -32,9 +67,9 @@ export function Guest() {
             <h1>
                 Getting things ready
                 <span className="dots">
-                    <span>.</span>
-                    <span>.</span>
-                    <span>.</span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </span>
             </h1>
         </div>
@@ -47,6 +82,7 @@ export function Guest() {
 
             <div className="guest">
                 <input
+                    ref={guestRef}
                     type="radio"
                     id="guest"
                     name="join"
@@ -71,6 +107,7 @@ export function Guest() {
                 {!isGuest && (
                     <div>
                         <input
+                            ref={usernameRef}
                             type="text"
                             value={username}
                             onChange={(e)=>setUsername(e.target.value)}
@@ -78,6 +115,7 @@ export function Guest() {
                         />
                     </div>
                 )}
+                {errors.username && <small style={{color: 'red'}}>{errors.username}</small>}
             </div>
 
             <button className="enter-chat" onClick={fetchUser}>Enter Chat</button>
