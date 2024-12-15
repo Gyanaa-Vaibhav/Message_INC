@@ -117,7 +117,6 @@ const Chat = () => {
             });
 
             socket.on('chatHistory', (chatHistory) => {
-                console.log(chatHistory)
                 if(oldMessages.current) return;
                 chatHistory.forEach((chat) => {
                     setMessages((prevMessages) => [JSON.parse(chat),...prevMessages]);

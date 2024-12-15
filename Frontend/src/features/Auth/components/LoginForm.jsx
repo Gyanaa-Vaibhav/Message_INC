@@ -52,7 +52,7 @@ export default function LoginForm() {
             })
             .then((data) => {
                 localStorage.setItem('accessToken', data.accessToken);
-                window.location.pathname = '/chat';
+                window.location.pathname = '/'; // Redirect to the home page
             })
             .catch((error) => {
                 console.error('Fetch error:', error)

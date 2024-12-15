@@ -81,3 +81,115 @@ h1{
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
 }
+
+/* Add this to your LandingPage.css */
+
+/* General Landing Container */
+.landing-container {
+    background-color: #1f2c34; /* WhatsApp dark background */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #1f2c34;
+    padding: 30px 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    color: #d1d7db;
+}
+
+/* Title */
+.form-container h1 {
+    font-size: 48px;
+    color: #25d366;
+    margin-bottom: 20px;
+}
+
+/* Description */
+.description {
+    font-size: 16px;
+    color: #8696a0;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Buttons */
+.action-button {
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.global-chat-btn {
+    background-color: #25d366;
+    color: #1f2c34;
+}
+
+.global-chat-btn:hover {
+    background-color: #1ebd56;
+}
+
+.room-btn {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.room-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .form-container h1 {
+        font-size: 36px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .action-button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .form-container {
+        padding: 20px 15px;
+    }
+
+    .form-container h1 {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 12px;
+    }
+
+    .action-button {
+        font-size: 12px;
+        padding: 10px;
+    }
+}
