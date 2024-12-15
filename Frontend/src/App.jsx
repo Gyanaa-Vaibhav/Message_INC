@@ -23,9 +23,7 @@ function App() {
 
     return (
         <>
-            <h1>FETCH Testing</h1>
-            <button onClick={handelFetch}>Fetch</button>
-            <button onClick={handelPostFetch}>Fetch POST</button>
+            <LoginForm />
         </>
     )
 }
