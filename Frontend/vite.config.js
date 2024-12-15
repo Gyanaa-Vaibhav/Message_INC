@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base:'/',
   build: {
-    outDir: '/var/www/Message_INC/html',
+    outDir: '/var/www/html/Message_INC',
     emptyOutDir: true,
   },
   server: {
