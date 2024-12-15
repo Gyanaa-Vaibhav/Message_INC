@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { verifyOrRefreshToken } from '../../../shared/index.js';
 
-const SOCKET_URL = 'https://gyanaavaibhav.in';
+const SOCKET_URL = import.meta.env.VITE_SERVER_IP || 'https://gyanaavaibhav.in';
 // TODO Change 2
 const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/chat' : '/chat';
 

@@ -7,8 +7,11 @@ import * as path from "node:path";
 import * as url from 'node:url';
 import {Server} from "socket.io";
 import * as http from "node:http";
-import Redis from "ioredis";
-import {loginRoute,registerRoute,guestRoute} from "./modules/index.js";
+import {
+    loginRoute,
+    registerRoute,
+    guestRoute
+} from "./modules/index.js";
 import {
     rateLimiter,
     refreshToken,
@@ -16,10 +19,21 @@ import {
     jwtTokenValidator,
     getCurrentUser,
     globalErrorHandler,
+    storeToRedis,
+    getFromRedis,
+    setExpiry,
+    getMessages,
+    addMessage,
+    deleteOldMessages
 } from "./shared/index.js";
-dotenv.config();
 
-const redis = new Redis();
+dotenv.config();
+const PORT = process.env.SERVER_PORT || 9999;
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+export const htmlDir = path.join(__dirname,'..','..', 'html');
+
+// Server Configuration
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -29,11 +43,8 @@ const io = new Server(server, {
         credentials: true,
     },
 });
-const PORT = process.env.SERVER_PORT || 9999;
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-export const htmlDir = path.join(__dirname,'..','..', 'html');
 
+// Trust Proxy
 app.set('trust proxy', 1);
 
 // Middleware
@@ -42,13 +53,6 @@ app.use(cors({
     origin: process.env.DEPLOYMENT_IP,
     credentials: true,
 }));
-app.use(helmet());
-app.use(cookieParser())
-app.use(express.json());
-
-// Middleware
-app.use(rateLimiter)
-
 app.use(cors({
     origin: process.env.DEPLOYMENT_IP,
     methods: ['GET', 'POST', 'OPTIONS'],    // Explicitly allow these methods
@@ -74,6 +78,7 @@ app.use(
 app.use(cookieParser())
 app.use(express.json());
 
+// Static Files
 app.use(express.static(path.join(htmlDir)));
 
 // Unprotected Routes
@@ -89,13 +94,8 @@ app.use('/guest',guestRoute)
 // Refresh Token
 app.post('/refreshToken',refreshToken)
 
-// Chat Route
 app.get('/chat',(req,res)=>{
     res.sendFile(path.join(htmlDir, 'index.html'));
-})
-
-app.get('/chat/:name',(req,res)=>{
-    res.json({"message":"Hello"})
 })
 
 // Protected Routes
@@ -110,54 +110,103 @@ app.get("/current_user", getCurrentUser);
 
 // Socket.io Connection
 io.on('connection', (socket) => {
-    io.emit('userJoined', {
-        username: socket.user.username,
-        time: new Date().toISOString(),
-    });
+    console.log('User Connected:', socket.id);
 
-    socket.on('sendMessage', (message) => {
-        console.log(message)
-        io.emit('newMessage', {
-            message: message,
+
+    socket.on('joinRoom', async (room) => {
+        socket.join(room);
+        await deleteOldMessages();
+
+        if(room !== 'general'){
+            await setExpiry(room)
+        }
+
+        const fromRedis = await getFromRedis(room);
+
+        if (fromRedis.length === 0) {
+            console.log('No redis found');
+            try{
+                const messages = await getMessages(room);
+                console.log(messages)
+
+                // Map messages into the desired format
+                const formattedMessages = messages.map((msg) => ({
+                    message: msg.message_content,
+                    username: msg.sender_name,
+                    time: msg.sent_id,
+                }));
+
+                const redisPromises = formattedMessages.map((message) =>
+                    storeToRedis(room, JSON.stringify(message))
+                );
+
+                await Promise.all(redisPromises);
+
+            }catch(err){
+                console.log('No data found')
+            }
+
+        }
+
+        const roomMessages = await getFromRedis(room);
+
+        io.to(room).emit('chatHistory',roomMessages);
+
+        io.to(room).emit('userJoined', {
             username: socket.user.username,
-            time: new Date().toISOString()});
+            time: new Date().toISOString(),
+        });
     });
 
+    socket.on('sendMessage',async ({ room, message })=>{
+        const username = socket.user.username;
+        const messageData = {
+            message: message,
+            username: username,
+            time: new Date().toISOString(),
+        };
+
+        await storeToRedis(room,JSON.stringify(messageData));
+        await addMessage(username,room,message);
+
+        io.to(room).emit('newMessage',messageData);
+    })
 
     // User Typing
-    socket.on('typing', () => {
-        io.emit('userTyping', {
+    socket.on('typing', ({room}) => {
+        io.to(room).emit('userTyping', {
             username:socket.user.username,
             message: 'is typing...'
         });
     });
 
 
-    socket.on('stopTyping', () => {
-        io.emit('userStoppedTyping');
+    socket.on('stopTyping', ({room}) => {
+        io.to(room).emit('userStoppedTyping');
     });
 
+    socket.on('disconnecting', () => {
+        const rooms = Array.from(socket.rooms);
+        rooms.forEach((room) => {
+            if (room !== socket.id) {
+                socket.to(room).emit('userDisconnected', socket.user.username);
+            }
+        });
+    });
 
     // Disconnect User
-    const disconnectedUser = (user)=>{
-        io.emit('userDisconnected',user)
-    };
+    // const disconnectedUser = (user)=>{
+    //     io.emit('userDisconnected',user)
+    // };
 
-    socket.on('disconnect', () => {
-        disconnectedUser(socket.user.username);
-    });
+    // socket.on('disconnect', () => {
+    //     disconnectedUser(socket.user.username);
+    // });
 
 });
 
 // Global Error Handler
 app.use(globalErrorHandler)
-
-
-async function redisTest() {
-        await redis.set('key', 'value');
-
-        const value = await redis.get('key');
-}
 
 // Listening to Port
 server.listen(PORT,()=>{

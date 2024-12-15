@@ -9,12 +9,15 @@ export default  function RegisterForm(){
     const confirmPasswordRef = useRef(null);
     const url = import.meta.env.VITE_SERVER_IP ? import.meta.env.VITE_SERVER_IP+'/register' : '/register';
 
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showError, setShowError] = useState(false);
     const [showPopup, setShowPopup] = useState(false); // To control popup visibility
     const [popupMessage, setPopupMessage] = useState(""); // To set popup message
     const [errors, setErrors] = useState({ username:'' ,email: '', password: '' ,confirmPassword: '' });
 
     function handelSubmit(e){
         e.preventDefault();
+
 
         const validateEmail = (value) => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,6 +73,9 @@ export default  function RegisterForm(){
         })
             .then(res => res.json())
             .then(data => {
+                console.log(data.success)
+                console.log(data.message)
+                console.log(data)
                 if (data.success) {
                     setPopupMessage('You have successfully registered! Redirecting to login page...');
                     setShowPopup(true)
@@ -100,7 +106,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.username && <small style={{color: 'red'}}>{errors.username}</small>}
+                {errors.username && <small style={{color: '#ffa5a5'}}>{errors.username}</small>}
 
                 <Input
                     ref={emailRef}
@@ -111,7 +117,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.email && <small style={{color: 'red'}}>{errors.email}</small>}
+                {errors.email && <small style={{color: '#ffa5a5'}}>{errors.email}</small>}
 
                 <Input
                     ref={passwordRef}
@@ -122,7 +128,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.password && <small style={{color: 'red'}}>{errors.password}</small>}
+                {errors.password && <small style={{color: '#ffa5a5'}}>{errors.password}</small>}
 
                 <Input
                     ref={confirmPasswordRef}
@@ -133,7 +139,7 @@ export default  function RegisterForm(){
                     required={true}
                     autoComplete={'off'}
                 />
-                {errors.confirmPassword && <small style={{color: 'red'}}>{errors.confirmPassword}</small>}
+                {errors.confirmPassword && <small style={{color: '#ffa5a5'}}>{errors.confirmPassword}</small>}
 
                 <Button
                     label="Register"

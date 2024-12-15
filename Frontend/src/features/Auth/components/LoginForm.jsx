@@ -88,7 +88,7 @@ export default function LoginForm() {
                         required={true}
                         autoComplete={'off'}
                     />
-                    {errors.email && <small style={{ color: 'red'}}>{errors.email}</small>}
+                    {errors.email && <small style={{ color: '#ffa5a5'}}>{errors.email}</small>}
 
                     <Input
                         ref={passwordRef}
@@ -99,7 +99,7 @@ export default function LoginForm() {
                         required={true}
                         autoComplete={'off'}
                     />
-                    {errors.password && <small style={{ color: 'red' }}>{errors.password}</small> }
+                    {errors.password && <small style={{ color: '#ffa5a5' }}>{errors.password}</small> }
 
                     <Button
                         label="Login"

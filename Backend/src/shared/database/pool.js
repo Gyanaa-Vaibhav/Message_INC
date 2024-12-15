@@ -31,4 +31,17 @@ export async function getUser(email){
     }
 }
 
+export async function getUsername(name){
+    try{
+        const query = 'SELECT * FROM users WHERE name = $1';
+        const values = [name];
+        console.log(`Executing query: ${query} with values: ${values}`);
+        const {rows} = await pool.query(query, values);
+        return rows[0] || null;
+    }catch (er){
+        console.error(er);
+        throw new Error('Error getting user');
+    }
+}
+
 export default pool;

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom'
+
 import { getSocket, disconnectSocket } from "../utils/socket.js";
 import '../styles/Chat.css';
 import { useAuthFetch } from '../../../shared/hooks/useAuth.jsx';
@@ -9,8 +11,6 @@ import Message from "./Message.jsx";
 
 
 const Chat = () => {
-    const { loading } = useAuthFetch();
-
     // State
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
@@ -22,13 +22,18 @@ const Chat = () => {
     const [typingMessage, setTypingMessage] = useState('');
     const [messagePopup, setMessagePopup] = useState(false);
     const [newMessage,setNewMessage] = useState(false);
+    const [searchParams] = useSearchParams();
 
     // Refs
     const messagesEndRef = useRef(null);
     const disconnectTimeouts = useRef({});
     const effectRan = useRef(false);
+    const oldMessages = useRef(false);
     const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
+
+    const roomName = searchParams.get('room') || 'general';
+    const { loading } = useAuthFetch();
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -58,6 +63,8 @@ const Chat = () => {
 
             if (!socket) return;
 
+            socket.emit('joinRoom', roomName);
+
             socket.on('userJoined', (message) => {
                 if (disconnectTimeouts.current[message.username]) {
                     console.log(`Clearing disconnect timeout for ${message.username}`);
@@ -73,7 +80,7 @@ const Chat = () => {
                     );
 
                     if (isUserActive) {
-                        return prevActiveUsers; // No change
+                        return prevActiveUsers;
                     }
 
                     return [...prevActiveUsers, message.username];
@@ -110,14 +117,18 @@ const Chat = () => {
             });
 
             socket.on('chatHistory', (chatHistory) => {
-                setMessages(chatHistory);
+                console.log(chatHistory)
+                if(oldMessages.current) return;
+                chatHistory.forEach((chat) => {
+                    setMessages((prevMessages) => [JSON.parse(chat),...prevMessages]);
+                })
+                oldMessages.current = true;
             });
 
             socket.on('newMessage', (message) => {
                 setTypingMessage(false);
                 setMessages((prevMessages) => [...prevMessages, message]);
             });
-
 
             socket.on('userTyping', (message) => {
                 setTypingUser((prev) => {
@@ -142,6 +153,7 @@ const Chat = () => {
 
             // Handle userDisconnected
             socket.on('userDisconnected', (user) => {
+                console.log(user)
 
                 // Set a timeout to add the "left chat" message after 10 seconds
                 disconnectTimeouts.current[user] = setTimeout(() => {
@@ -159,7 +171,7 @@ const Chat = () => {
 
                     // Remove the timeout reference after execution
                     delete disconnectTimeouts.current[user];
-                }, 20000);
+                }, 10000);
             });
 
         };
@@ -193,7 +205,13 @@ const Chat = () => {
         if (input.trim().length === 0) return; // Don't send empty messages
         const socket = await getSocket();
         if (socket) {
-            socket.emit('sendMessage', input);
+            // For Non Rooms
+            // socket.emit('sendMessage', input);
+            // For Rooms
+            socket.emit('sendMessage', {
+                room: roomName,
+                message:input,
+            });
             setInput('');
         }
     };
@@ -202,13 +220,13 @@ const Chat = () => {
         const socket = await getSocket();
         if (!isTyping) {
             setIsTyping(true);
-            socket.emit('typing');
+            socket.emit('typing', {room:roomName});
         }
 
         const typingTimeout = setTimeout(() => {
             setIsTyping(false);
             setTypingUser([]);
-            socket.emit('stopTyping'); // Notify the server
+            socket.emit('stopTyping',{room:roomName}); // Notify the server
         }, 2500);
 
         if (isTyping) {

@@ -19,13 +19,13 @@ export function Guest() {
     function fetchUser() {
 
         const validateUser = (value)=>{
-            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+            const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
             if(value === ''){
                 return 'Username is required';
             }else if(value.length < 4 || value.length > 20){
                 return 'Username must be 3-20 characters long';
             } else if(!usernameRegex.test(value)){
-                return 'Username can only contain letters, numbers, and underscores (_).'
+                return 'Username can only contain letters, numbers.'
             }
             return '';
         }
@@ -110,12 +110,18 @@ export function Guest() {
                             ref={usernameRef}
                             type="text"
                             value={username}
-                            onChange={(e)=>setUsername(e.target.value)}
                             placeholder="Enter your username"
+                            onChange={(e)=>setUsername(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    fetchUser();
+                                }
+                            }}
                         />
                     </div>
                 )}
-                {errors.username && <small style={{color: 'red'}}>{errors.username}</small>}
+                {errors.username && <small style={{color:'#ffa5a5'}}>{errors.username}</small>}
             </div>
 
             <button className="enter-chat" onClick={fetchUser}>Enter Chat</button>
