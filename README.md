@@ -93,7 +93,7 @@ This is a real-time chat application that supports user authentication, guest lo
    Create a `.env` file in the `Frontend` directory with the following:
    ```env
    VITE_SERVER_IP=http://localhost:9999
-   VITE_SOCJET_IP=http://localhost:3000
+   VITE_SOCKET_IP=http://localhost:3000
    ```
 
 4. Start the frontend server:
