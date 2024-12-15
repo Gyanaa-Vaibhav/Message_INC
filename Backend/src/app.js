@@ -31,7 +31,7 @@ dotenv.config();
 const PORT = process.env.SERVER_PORT || 9999;
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-export const htmlDir = path.join(__dirname,'..','..', 'html');
+export const htmlDir = path.join(__dirname,'..','..', '..','html','Message_INC');
 
 // Server Configuration
 const app = express();
