@@ -40,7 +40,7 @@ function validateEmail(param){
 export const validateRegister = [
     validateUser('username'),
     validatePassword('password'),
-    validateEmail(),
+    validateEmail('email'),
     comparePass()
 ]
 

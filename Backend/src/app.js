@@ -35,7 +35,7 @@ export const htmlDir = path.join(__dirname,'..','..', '..','html','Message_INC')
 
 // Server Configuration
 const app = express();
-const server = http.createServer(app);
+export const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: process.env.DEPLOYMENT_IP,
@@ -193,16 +193,6 @@ io.on('connection', (socket) => {
             }
         });
     });
-
-    // Disconnect User
-    // const disconnectedUser = (user)=>{
-    //     io.emit('userDisconnected',user)
-    // };
-
-    // socket.on('disconnect', () => {
-    //     disconnectedUser(socket.user.username);
-    // });
-
 });
 
 // Global Error Handler

@@ -20,6 +20,7 @@ export function handelGuest(req, res,next) {
         })
         return res.json({
             success: true,
+            username: username.split('_')[0],
             accessToken,
         });
 

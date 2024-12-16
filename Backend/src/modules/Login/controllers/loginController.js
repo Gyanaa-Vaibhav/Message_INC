@@ -10,7 +10,6 @@ export function renderLogin(req, res) {
 
 // Handle Login
 export async function handleLogin(req, res,next) {
-    console.log("Inside handleLogin");
     try{
         const {email,password} = req.body;
         const result = await loginModel.handleLogin(email,password);
